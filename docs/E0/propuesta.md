@@ -75,7 +75,7 @@
 - Los tokens se guardan como secretos de GitHub Actions (INEGI_TOKEN y BANXICO_TOKEN) y nunca se escriben en el código ni en los registros.
 - Se envía un User-Agent que identifica el proyecto académico.
 - No se recopilan datos personales; los datos son estadísticas agregadas.
-- Revisión de términos y robots.txt realizada el: [COMPLETAR: fecha]
+- Revisión de términos y robots.txt realizada el: 06/11/2026
 
 ### 4.3 Estrategia de captura (capa Bronce)
 

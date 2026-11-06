@@ -12,7 +12,6 @@
 | Pregunta detonadora | ¿Cuánto cambiarán los precios de los alimentos en Colima en los próximos meses y qué factores los explican?                             |
 | Cliente potencial   | Pequeños comercios locales (tiendas de abarrotes, fondas, restaurantes) que necesitan anticipar costos para fijar precios y planear compras |
 
-
 ## 2. Entrevista de campo
 
 **Entrevistado:** José Manuel Ramírez Torres, dueño de Abarrotes "Santa Anita"
@@ -43,4 +42,43 @@
 
 ## 4. Plan de recopilación de datos
 
-[COMPLETAR en el Paso 2: al menos 2 fuentes con análisis ético y legal (robots.txt y términos de uso)]
+### 4.1 Fuentes seleccionadas
+
+|                    | Fuente 1                                                                                          | Fuente 2                                                   |
+| ------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Institución       | INEGI                                                                                             | Banco de México (Banxico)                                 |
+| Producto           | API de Indicadores (BIE/BISE)                                                                     | API del Sistema de Información Económica (SIE)           |
+| Tipo de acceso     | API REST con token gratuito, respuesta en JSON                                                    | API REST con token gratuito, respuesta en JSON             |
+| Datos              | INPC por ciudad y por categoría de alimentos, bebidas y tabaco (Colima y ciudades de la región) | Variables explicativas: tipo de cambio FIX e INPC nacional |
+| Frecuencia         | Mensual                                                                                           | Diaria (tipo de cambio) y mensual (INPC)                   |
+| Historial          | Más de 36 meses disponibles                                                                      | Más de 36 meses disponibles                               |
+| Rol en el proyecto | Variable a pronosticar (E1) y grupos a comparar (E3)                                              | Factores a experimentar (E2)                               |
+
+### 4.2 Análisis ético y legal
+
+**INEGI**
+
+- **robots.txt:** no hay restricciones.
+- **Términos de uso:** los Términos de Libre Uso del INEGI permiten copiar, distribuir, difundir y adaptar la información sin alterar ni suprimir sus metadatos. Condiciones: citar la fuente ("Fuente: INEGI, nombre del producto") con la fecha de actualización cuando sea posible, no aparentar que el proyecto es avalado u oficial del INEGI y no usar los datos para engañar o cambiar su sentido original.
+- **Cumplimiento:** el observatorio mostrará la fuente en cada gráfica y tabla; la capa Bronce conserva los datos crudos con sus metadatos sin modificar.
+
+**Banxico**
+
+- **robots.txt:** no hay restricciones.
+- **Términos de uso:** el SIE exige un token de consulta y pide citar claramente a Banco de México como fuente, con la dirección web de origen para que terceros verifiquen la información. La API establece límites de consultas.
+- **Cumplimiento:** se citará "Fuente: Banco de México, Sistema de Información Económica (SIE)" con su URL, y se respetarán los límites de consultas.
+
+**Buenas prácticas del extractor (aplican a ambas fuentes)**
+
+- Solo se consumen las APIs oficiales; no se hace scraping de páginas.
+- Frecuencia baja: una ejecución programada por semana, pidiendo solo las series necesarias, con reintentos espaciados.
+- Los tokens se guardan como secretos de GitHub Actions (INEGI_TOKEN y BANXICO_TOKEN) y nunca se escriben en el código ni en los registros.
+- Se envía un User-Agent que identifica el proyecto académico.
+- No se recopilan datos personales; los datos son estadísticas agregadas.
+- Revisión de términos y robots.txt realizada el: [COMPLETAR: fecha]
+
+### 4.3 Estrategia de captura (capa Bronce)
+
+- Un script en `src/` descargará las series completas de cada fuente y guardará la respuesta cruda (JSON) en `datos/bronce/`, con la fecha de captura en el nombre del archivo.
+- GitHub Actions ejecutará el script de forma programada y hará commit de los datos nuevos.
+- Meta de E0: serie histórica inicial con al menos 36 periodos mensuales por fuente.

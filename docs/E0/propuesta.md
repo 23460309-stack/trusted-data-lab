@@ -5,12 +5,12 @@
 
 ## 1. Ficha del observatorio
 
-| Campo               | Descripción                                                                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Sector              | Comercio y precios al consumidor (alimentos, bebidas y tabaco)                                                                               |
-| Región             | Colima, México                                                                                                                              |
-| Pregunta detonadora | ¿Cuánto cambiarán los precios de los alimentos en Colima en los próximos meses y qué factores los explican?                             |
-| Cliente potencial   | Pequeños comercios locales (tiendas de abarrotes, fondas, restaurantes) que necesitan anticipar costos para fijar precios y planear compras |
+| Campo               | Descripción                                                                                                                                           |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Sector              | Comercio y precios al consumidor (alimentos, bebidas y tabaco)                                                                                         |
+| Región             | Colima, México                                                                                                                                        |
+| Pregunta detonadora | ¿Cuánto cambiarán los precios al consumidor en los próximos meses y qué factores los explican, para que un comercio de Colima planee sus compras? |
+| Cliente potencial   | Pequeños comercios locales (tiendas de abarrotes, fondas, restaurantes) que necesitan anticipar costos para fijar precios y planear compras           |
 
 ## 2. Entrevista de campo
 
@@ -36,23 +36,25 @@
 
 ## 3. Las 3 preguntas analíticas
 
-1. **Variable a pronosticar (E1):** ¿Cuál será el índice de precios (INPC) de alimentos, bebidas y tabaco en Colima en los próximos 6 meses?
-2. **Factores a experimentar (E2):** ¿Afectan la temporada del año (trimestre) y la categoría de producto (por ejemplo frutas y verduras frente a carnes) a la variación mensual de precios?
-3. **Grupos multivariados a comparar (E3):** ¿Se comportan distinto las ciudades del occidente (Colima, Guadalajara, Tepic) considerando varias categorías de precios a la vez?
+1. **Variable a pronosticar (E1):** ¿Cuál será el índice general de precios al consumidor (INPC) de México en los próximos 6 meses?
+3. **Factores a experimentar (E2):** ¿Afectan el tipo de cambio y la temporada del año (trimestre) a la variación mensual del INPC?
+4. **Grupos multivariados a comparar (E3):** ¿Se comportan de forma distinta los componentes del INPC (subyacente, no subyacente y rubros de alimentos) considerando varios indicadores a la vez? Las series de componentes se agregarán a la capa Bronce en la siguiente etapa.
 
 ## 4. Plan de recopilación de datos
 
 ### 4.1 Fuentes seleccionadas
 
-|                    | Fuente 1                                                                                          | Fuente 2                                                   |
-| ------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Institución       | INEGI                                                                                             | Banco de México (Banxico)                                 |
-| Producto           | API de Indicadores (BIE/BISE)                                                                     | API del Sistema de Información Económica (SIE)           |
-| Tipo de acceso     | API REST con token gratuito, respuesta en JSON                                                    | API REST con token gratuito, respuesta en JSON             |
-| Datos              | INPC por ciudad y por categoría de alimentos, bebidas y tabaco (Colima y ciudades de la región) | Variables explicativas: tipo de cambio FIX e INPC nacional |
-| Frecuencia         | Mensual                                                                                           | Diaria (tipo de cambio) y mensual (INPC)                   |
-| Historial          | Más de 36 meses disponibles                                                                      | Más de 36 meses disponibles                               |
-| Rol en el proyecto | Variable a pronosticar (E1) y grupos a comparar (E3)                                              | Factores a experimentar (E2)                               |
+|                    | Fuente 1                                                          | Fuente 2                                                   |
+| ------------------ | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| Institución       | INEGI                                                             | Banco de México (Banxico)                                 |
+| Producto           | API de Indicadores (BIE/BISE)                                     | API del Sistema de Información Económica (SIE)           |
+| Tipo de acceso     | API REST con token gratuito, respuesta en JSON                    | API REST con token gratuito, respuesta en JSON             |
+| Datos              | INPC indice general nacional, mensual (ID 910392, banco BIE-BISE) | Variables explicativas: tipo de cambio FIX e INPC nacional |
+| Frecuencia         | Mensual                                                           | Diaria (tipo de cambio) y mensual (INPC)                   |
+| Historial          | Más de 36 meses disponibles                                      | Más de 36 meses disponibles                               |
+| Rol en el proyecto | Variable a pronosticar (E1)                                       | Factores a experimentar (E2)                               |
+
+**Nota sobre la cobertura geográfica:** no se encontró en el BIE una serie de INPC específica de Colima, por lo que los datos de precios son nacionales. Colima se mantiene como región de estudio y de validación con el cliente (entrevista a un comercio de Villa de Álvarez); el pronóstico nacional sirve como referencia para sus decisiones de compra.
 
 ### 4.2 Análisis ético y legal
 

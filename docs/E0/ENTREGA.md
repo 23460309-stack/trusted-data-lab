@@ -59,6 +59,6 @@ Los tokens se guardan como secretos del repositorio (`INEGI_TOKEN` y `BANXICO_TO
 ## 5. Lista de verificación de entrega
 
 - [ ] Los 3 docentes agregados como colaboradores del repositorio
-- [ ] Tag `e0` creado y subido a GitHub
-- [ ] Enlace registrado en el formulario oficial del proyecto integrador
-- [ ] Enlace pegado en la tarea
+- [X] Tag `e0` creado y subido a GitHub
+- [X] Enlace registrado en el formulario oficial del proyecto integrador
+- [X] Enlace pegado en la tarea

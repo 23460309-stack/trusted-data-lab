@@ -1,0 +1,23 @@
+{
+  "series": [
+    {
+      "fuente": "inegi",
+      "nombre": "inpc_nacional_inegi",
+      "id": "910392",
+      "area": "00",
+      "banco": "BIE-BISE"
+    },
+    {
+      "fuente": "banxico",
+      "nombre": "tipo_cambio_fix",
+      "id": "SF43718",
+      "inicio": "2020-01-01"
+    },
+    {
+      "fuente": "banxico",
+      "nombre": "inpc_nacional",
+      "id": "SP1",
+      "inicio": "2020-01-01"
+    }
+  ]
+}

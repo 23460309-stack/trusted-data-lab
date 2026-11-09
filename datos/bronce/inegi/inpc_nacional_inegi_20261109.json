@@ -12,9 +12,18 @@
    "UNIT_MULT": "",
    "NOTE": "",
    "SOURCE": "3371",
-   "LASTUPDATE": "08/10/2026 12:00:00 a. m.",
+   "LASTUPDATE": "09/11/2026 12:00:00 a. m.",
    "STATUS": null,
    "OBSERVATIONS": [
+    {
+     "TIME_PERIOD": "2026/10",
+     "OBS_VALUE": "147.02600000000001000000",
+     "OBS_EXCEPTION": null,
+     "OBS_STATUS": "3",
+     "OBS_SOURCE": "",
+     "OBS_NOTE": "",
+     "COBER_GEO": "0"
+    },
     {
      "TIME_PERIOD": "2026/09",
      "OBS_VALUE": "146.07499999999999000000",

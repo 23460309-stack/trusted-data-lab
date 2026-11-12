@@ -142,9 +142,8 @@ if __name__ == "__main__":
     limpia = t.join(v)
     limpia.to_csv(PLATA / "tabla_limpia.csv")
 
-    por_decada = (
-        v.loc[v["var_inpc_pct_atipico"]].groupby((v.index.year // 10) * 10).size().rename("atipicos_inpc")
-    )
+    atip = v.loc[v["var_inpc_pct_atipico"]]
+    por_decada = atip.groupby((atip.index.year // 10) * 10).size().rename("atipicos_inpc")
     tops = {c: top_atipicos(v, c) for c in VARIABLES}
 
     print("--- Resumen de detección ---")

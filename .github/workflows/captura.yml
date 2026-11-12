@@ -1,36 +1,40 @@
-name: Captura Bronce
+name: Pipeline Bronce, Plata y Oro
 
 on:
   schedule:
-    - cron: "0 14 * * 1"
-  workflow_dispatch:
+    - cron: "0 14 * * 1"   # cada lunes, 14:00 UTC
+  workflow_dispatch:        # permite ejecutarlo a mano
 
 permissions:
   contents: write
 
 jobs:
-  captura:
+  pipeline:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
+          cache: pip
 
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
-      - name: Ejecutar extractor
+      - name: Capa Bronce (extractor)
         env:
           INEGI_TOKEN: ${{ secrets.INEGI_TOKEN }}
           BANXICO_TOKEN: ${{ secrets.BANXICO_TOKEN }}
         run: python src/extractor.py
+
+      - name: Capas Plata y Oro (pipeline)
+        run: python src/pipeline.py
 
       - name: Guardar datos nuevos en el repositorio
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add datos/bronce
-          git diff --staged --quiet || (git commit -m "data: captura bronce $(date -u +%F)" && git push)
+          git add datos
+          git diff --staged --quiet || (git commit -m "data: pipeline bronce-plata-oro $(date -u +%F)" && git push)

@@ -2,3 +2,5 @@
 "D-001,2026-11-06,Configuración,Subida a GitHub,Entorno,60,git push rechazado con error 403 por una credencial de otra cuenta guardada en Windows,Se borró la credencial guardada y se autenticó con la cuenta correcta"
 "D-002,2026-11-07,Planeación,Desarrollo,Datos,50,Se asumió que existía una serie de INPC de Colima en el INEGI y no se encontró,Se usó el INPC nacional (ID 910392) y se ajustó el plan de datos"
 "D-003,2026-11-08,Planeación,Desarrollo,Entorno,60,Búsqueda del INPC en el conjunto de datos equivocado (Banco de Indicadores en lugar del BIE),Se cambió el conjunto de datos a BIE y se localizó la serie"
+"D-004,2026-11-12,Desarrollo,Pruebas,Código,30,Error en src/atipicos.py al contar atípicos por década: se agrupaba con el índice de la tabla completa tras filtrar (ValueError: Grouper and axis must be same length),Se filtró primero y se agrupó con el índice de la tabla filtrada"
+"D-005,2026-11-12,Automatización,Subida a GitHub,Entorno,30,git push rechazado porque el flujo automático había subido datos nuevos al repositorio,Se ejecutó git pull --no-rebase --no-edit y luego git push"

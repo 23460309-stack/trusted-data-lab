@@ -14,3 +14,6 @@ fecha_captura_utc,fuente,serie,id,observaciones,archivo,estado
 2026-11-12T22:51:54.825889+00:00,inegi,inpc_nacional_inegi,910392,694,datos/bronce/inegi/inpc_nacional_inegi_20261112.json,ok
 2026-11-12T22:51:54.825889+00:00,banxico,tipo_cambio_fix,SF43718,1728,datos/bronce/banxico/tipo_cambio_fix_20261112.json,ok
 2026-11-12T22:51:54.825889+00:00,banxico,inpc_nacional,SP1,82,datos/bronce/banxico/inpc_nacional_20261112.json,ok
+2026-11-16T23:04:44.459142+00:00,inegi,inpc_nacional_inegi,910392,694,datos/bronce/inegi/inpc_nacional_inegi_20261116.json,ok
+2026-11-16T23:04:44.459142+00:00,banxico,tipo_cambio_fix,SF43718,1729,datos/bronce/banxico/tipo_cambio_fix_20261116.json,ok
+2026-11-16T23:04:44.459142+00:00,banxico,inpc_nacional,SP1,82,datos/bronce/banxico/inpc_nacional_20261116.json,ok

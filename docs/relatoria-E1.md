@@ -1,4 +1,3 @@
-
 # Relatoría de etapa: E1
 
 **Proyecto:** Trusted Data Lab, Observatorio de precios al consumidor

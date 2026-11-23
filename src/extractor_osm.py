@@ -3,6 +3,10 @@
 Minimización de datos: de cada tienda solo se conservan campos no personales
 (identificador, tipo, marca y coordenadas). No se guardan nombres, sitios web ni direcciones.
 Los límites municipales son datos administrativos públicos y se guardan completos.
+
+Uso:
+    python src/extractor_osm.py                  # tiendas y límites
+    python src/extractor_osm.py --solo-limites   # solo límites (retoma los municipios que falten)
 """
 import json
 import sys
@@ -22,6 +26,10 @@ SERVIDORES = [
 HEADERS = {"User-Agent": "TrustedDataLab-ITColima/1.0 (proyecto academico; github.com/23460309-stack/trusted-data-lab)"}
 TIENDAS = "convenience|supermarket|general"
 LICENCIA = "ODbL 1.0. Atribución: © OpenStreetMap contributors (https://www.openstreetmap.org/copyright)"
+MUNICIPIOS = [
+    "Armería", "Comala", "Coquimatlán", "Cuauhtémoc", "Ixtlahuacán",
+    "Manzanillo", "Minatitlán", "Municipio de Colima", "Tecomán", "Villa de Álvarez",
+]
 
 CONSULTA_TIENDAS = f"""
 [out:json][timeout:90];
@@ -33,18 +41,20 @@ area["name"="Colima"]["admin_level"="4"]->.est;
 out center tags;
 """
 
-CONSULTA_LIMITES = """
-[out:json][timeout:180];
-area["name"="Colima"]["admin_level"="4"]->.est;
-relation["boundary"="administrative"]["admin_level"="6"](area.est);
-out geom;
-"""
-
 CAMPOS_CONSERVADOS = ["osm_type", "osm_id", "shop", "brand", "lat", "lon"]
 CAMPOS_DESCARTADOS = ["name", "website", "phone", "email", "addr:*", "opening_hours", "operator", "otros tags"]
 
 
-def consultar(texto, intentos_por_servidor=2, pausa=10):
+def consulta_limite(nombre):
+    return f"""
+[out:json][timeout:120];
+area["name"="Colima"]["admin_level"="4"]->.est;
+relation["boundary"="administrative"]["admin_level"="6"]["name"="{nombre}"](area.est);
+out geom;
+"""
+
+
+def consultar(texto, intentos_por_servidor=2, pausa=8):
     for servidor in SERVIDORES:
         host = servidor.split("/")[2]
         for n in range(1, intentos_por_servidor + 1):
@@ -72,65 +82,88 @@ def proyectar_tienda(e):
     }
 
 
-def guardar(carpeta, nombre, ahora, cuerpo):
-    carpeta.mkdir(parents=True, exist_ok=True)
-    archivo = carpeta / f"{nombre}_{ahora:%Y%m%d}.json"
-    archivo.write_text(json.dumps(cuerpo, ensure_ascii=False), encoding="utf-8")
-    return archivo
-
-
-def main():
-    ahora = datetime.now(timezone.utc)
+def extraer_tiendas(ahora):
     carpeta = BRONCE / "osm"
-    fallos = 0
-
-    # 1) Tiendas
+    carpeta.mkdir(parents=True, exist_ok=True)
     print("[osm] tiendas_colima")
     crudo = consultar(CONSULTA_TIENDAS)
     registros = [proyectar_tienda(e) for e in (crudo or {}).get("elements", [])]
     if not registros:
         print("    No se obtuvieron tiendas")
         registrar([ahora.isoformat(), "osm", "tiendas_colima", "overpass", 0, "", "error"])
-        fallos += 1
-    else:
-        archivo = guardar(carpeta, "tiendas_colima", ahora, {
-            "fuente": "OpenStreetMap (Overpass API)",
-            "fecha_ingesta_utc": ahora.isoformat(),
-            "osm_base_timestamp": crudo.get("osm3s", {}).get("timestamp_osm_base"),
-            "licencia": LICENCIA,
-            "consulta": CONSULTA_TIENDAS.strip(),
-            "campos_conservados": CAMPOS_CONSERVADOS,
-            "campos_descartados_por_privacidad": CAMPOS_DESCARTADOS,
-            "registros": registros,
-        })
-        ruta = archivo.relative_to(RAIZ).as_posix()
-        registrar([ahora.isoformat(), "osm", "tiendas_colima", "overpass", len(registros), ruta, "ok"])
-        print(f"    OK: {len(registros)} tiendas -> {ruta}")
+        return False
+    archivo = carpeta / f"tiendas_colima_{ahora:%Y%m%d}.json"
+    archivo.write_text(json.dumps({
+        "fuente": "OpenStreetMap (Overpass API)",
+        "fecha_ingesta_utc": ahora.isoformat(),
+        "osm_base_timestamp": crudo.get("osm3s", {}).get("timestamp_osm_base"),
+        "licencia": LICENCIA,
+        "consulta": CONSULTA_TIENDAS.strip(),
+        "campos_conservados": CAMPOS_CONSERVADOS,
+        "campos_descartados_por_privacidad": CAMPOS_DESCARTADOS,
+        "registros": registros,
+    }, ensure_ascii=False), encoding="utf-8")
+    ruta = archivo.relative_to(RAIZ).as_posix()
+    registrar([ahora.isoformat(), "osm", "tiendas_colima", "overpass", len(registros), ruta, "ok"])
+    print(f"    OK: {len(registros)} tiendas -> {ruta}")
+    return True
 
-    time.sleep(5)
 
-    # 2) Límites municipales
-    print("[osm] limites_municipales_colima")
-    crudo = consultar(CONSULTA_LIMITES)
-    relaciones = [e for e in (crudo or {}).get("elements", []) if e.get("type") == "relation"]
-    if not relaciones:
-        print("    No se obtuvieron límites")
-        registrar([ahora.isoformat(), "osm", "limites_municipales_colima", "overpass", 0, "", "error"])
-        fallos += 1
-    else:
-        archivo = guardar(carpeta, "limites_municipales_colima", ahora, {
-            "fuente": "OpenStreetMap (Overpass API)",
-            "fecha_ingesta_utc": ahora.isoformat(),
-            "osm_base_timestamp": crudo.get("osm3s", {}).get("timestamp_osm_base"),
-            "licencia": LICENCIA,
-            "consulta": CONSULTA_LIMITES.strip(),
-            "relaciones": relaciones,
-        })
-        ruta = archivo.relative_to(RAIZ).as_posix()
-        registrar([ahora.isoformat(), "osm", "limites_municipales_colima", "overpass", len(relaciones), ruta, "ok"])
-        print(f"    OK: {len(relaciones)} municipios -> {ruta}")
+def guardar_limites(archivo, ahora, base_ts, relaciones):
+    archivo.write_text(json.dumps({
+        "fuente": "OpenStreetMap (Overpass API)",
+        "fecha_ingesta_utc": ahora.isoformat(),
+        "osm_base_timestamp": base_ts,
+        "licencia": LICENCIA,
+        "nota": "Una consulta por municipio (out geom)",
+        "relaciones": list(relaciones.values()),
+    }, ensure_ascii=False), encoding="utf-8")
 
-    sys.exit(1 if fallos else 0)
+
+def extraer_limites(ahora):
+    carpeta = BRONCE / "osm"
+    carpeta.mkdir(parents=True, exist_ok=True)
+    archivo = carpeta / f"limites_municipales_colima_{ahora:%Y%m%d}.json"
+    relaciones, base_ts = {}, None
+    if archivo.exists():  # retoma lo ya descargado hoy
+        previo = json.loads(archivo.read_text(encoding="utf-8"))
+        base_ts = previo.get("osm_base_timestamp")
+        relaciones = {r["tags"]["name"]: r for r in previo.get("relaciones", [])}
+
+    print(f"[osm] limites_municipales_colima (ya descargados: {len(relaciones)} de {len(MUNICIPIOS)})")
+    for nombre in MUNICIPIOS:
+        if nombre in relaciones:
+            print(f"  {nombre}: ya estaba")
+            continue
+        print(f"  {nombre}:")
+        crudo = consultar(consulta_limite(nombre))
+        rels = [e for e in (crudo or {}).get("elements", []) if e.get("type") == "relation"]
+        if rels:
+            relaciones[nombre] = rels[0]
+            base_ts = crudo.get("osm3s", {}).get("timestamp_osm_base", base_ts)
+            guardar_limites(archivo, ahora, base_ts, relaciones)
+            print("    OK")
+        else:
+            print("    no se pudo obtener; se reintentará en la siguiente ejecución")
+        time.sleep(5)
+
+    completo = len(relaciones) == len(MUNICIPIOS)
+    ruta = archivo.relative_to(RAIZ).as_posix() if relaciones else ""
+    registrar([ahora.isoformat(), "osm", "limites_municipales_colima", "overpass",
+               len(relaciones), ruta, "ok" if completo else "parcial"])
+    print(f"    Municipios disponibles: {len(relaciones)} de {len(MUNICIPIOS)}")
+    return completo
+
+
+def main():
+    ahora = datetime.now(timezone.utc)
+    solo_limites = "--solo-limites" in sys.argv
+    ok = True
+    if not solo_limites:
+        ok = extraer_tiendas(ahora) and ok
+        time.sleep(5)
+    ok = extraer_limites(ahora) and ok
+    sys.exit(0 if ok else 1)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ name: Pipeline Bronce, Plata y Oro
 
 on:
   schedule:
-    - cron: "0 14 * * 1"   # cada lunes, 14:00 UTC
+    - cron: "0 14 * * 1"   # cada lunes, 14:00 UTC (8:00 en Colima)
   workflow_dispatch:        # permite ejecutarlo a mano
 
 permissions:
@@ -22,11 +22,15 @@ jobs:
       - name: Instalar dependencias
         run: pip install -r requirements.txt
 
-      - name: Capa Bronce (extractor)
+      - name: Capa Bronce (INEGI y Banxico)
         env:
           INEGI_TOKEN: ${{ secrets.INEGI_TOKEN }}
           BANXICO_TOKEN: ${{ secrets.BANXICO_TOKEN }}
         run: python src/extractor.py
+
+      - name: Capa Bronce (OpenStreetMap)
+        continue-on-error: true   # si Overpass está saturado, se usan los últimos datos ya guardados
+        run: python src/extractor_osm.py
 
       - name: Capas Plata y Oro (pipeline)
         run: python src/pipeline.py

@@ -75,8 +75,17 @@ def poligono_municipio(rel):
 
 
 def cargar_municipios():
-    archivo = ultimo("limites_municipales_colima_*.json")
-    j = json.loads(archivo.read_text(encoding="utf-8"))
+    """Usa el archivo de límites más reciente que tenga los 10 municipios (nunca uno incompleto)."""
+    esperados = 10
+    candidatos = sorted((BRONCE / "osm").glob("limites_municipales_colima_*.json"), reverse=True)
+    for archivo in candidatos:
+        j = json.loads(archivo.read_text(encoding="utf-8"))
+        if len(j.get("relaciones", [])) >= esperados:
+            break
+    else:
+        raise FileNotFoundError(
+            f"No hay un archivo de límites municipales completo ({esperados} municipios) en datos/bronce/osm"
+        )
     filas = []
     for rel in j["relaciones"]:
         filas.append({

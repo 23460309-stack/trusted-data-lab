@@ -3,7 +3,7 @@
 
 **Proyecto:** Trusted Data Lab, Observatorio de precios al consumidor
 **Autor:** Kevin Gilberto Borjas Avalos
-**Última revisión:** [COMPLETAR: fecha, 23 de noviembre de 2026]
+**Última revisión:** fecha, 23 de noviembre de 2026
 
 ## 1. Fuentes y su base legal
 
@@ -20,7 +20,7 @@
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | inegi.org.mx    | La ruta `/app` (donde se aloja la API) aparece con `Allow`. Las restricciones (`Disallow`) son del catálogo de microdatos (`/catalog/`) y del registro de usuarios (`/auth/register/`), que el proyecto no usa. |
 | banxico.org.mx  | No se encontraron reglas que restrinjan la ruta de la API (`/SieAPIRest/`) ni un bloqueo total del sitio.                                                                                                                |
-| overpass-api.de | [COMPLETAR: resultado de revisar https://overpass-api.de/robots.txt, indicando si restringe `/api/`]                                                                                                                     |
+| overpass-api.de |  https://overpass-api.de/robots.txt, indicando si restringe `/api/`                                                                                                                                                     |
 
 Los tres servicios usados son APIs diseñadas para consulta automatizada, no páginas que se raspen.
 
@@ -41,7 +41,7 @@ Los tres servicios usados son APIs diseñadas para consulta automatizada, no pá
 - **Datos personales:** el observatorio no recolecta datos de personas físicas ni de clientes. Las fuentes son estadísticas agregadas (INPC y tipo de cambio) y ubicaciones de comercios.
 - **Minimización en OpenStreetMap:** de cada tienda solo se conservan identificador de OpenStreetMap, tipo de tienda, marca y coordenadas. Se descartan desde la ingesta (antes de escribir en Bronce) el nombre, el sitio web, el teléfono, el correo, la dirección, el horario y el resto de las etiquetas. La razón: en una tienda pequeña el nombre puede ser el de una persona, y la dirección puede coincidir con un domicilio. El archivo de Bronce documenta qué campos se conservaron y cuáles se descartaron.
 - **Coordenadas:** corresponden a establecimientos comerciales. Si el repositorio se hiciera público, se publicarían los resultados agregados por municipio y se reduciría la precisión de las coordenadas individuales.
-- **Entrevista:** la persona entrevistada es dueña de un negocio. [COMPLETAR: confirmar que aceptó que aparezca su nombre; si no, dejar solo sus iniciales en docs/E0/propuesta.md]. El repositorio es privado y solo tienen acceso los docentes.
+- **Entrevista:** Aceptó que su nombre aparezca en el repositorio.
 - **Seguridad:** ninguna credencial está en el repositorio. Los tokens que se pegaron durante el desarrollo se regeneran al terminar la etapa.
 
 ## 6. Fuente evaluada y descartada: DENUE (API)

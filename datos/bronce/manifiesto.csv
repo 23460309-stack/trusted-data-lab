@@ -26,3 +26,8 @@ fecha_captura_utc,fuente,serie,id,observaciones,archivo,estado
 2026-11-23T17:14:52.402791+00:00,banxico,inpc_nacional,SP1,82,datos/bronce/banxico/inpc_nacional_20261123.json,ok
 2026-11-23T17:15:18.837025+00:00,osm,tiendas_colima,overpass,0,,error
 2026-11-23T17:15:18.837025+00:00,osm,limites_municipales_colima,overpass,10,datos/bronce/osm/limites_municipales_colima_20261123.json,ok
+2026-11-24T01:18:18.728570+00:00,inegi,inpc_nacional_inegi,910392,694,datos/bronce/inegi/inpc_nacional_inegi_20261124.json,ok
+2026-11-24T01:18:18.728570+00:00,banxico,tipo_cambio_fix,SF43718,1734,datos/bronce/banxico/tipo_cambio_fix_20261124.json,ok
+2026-11-24T01:18:18.728570+00:00,banxico,inpc_nacional,SP1,82,datos/bronce/banxico/inpc_nacional_20261124.json,ok
+2026-11-24T01:18:45.766157+00:00,osm,tiendas_colima,overpass,209,datos/bronce/osm/tiendas_colima_20261124.json,ok
+2026-11-24T01:18:45.766157+00:00,osm,limites_municipales_colima,overpass,10,datos/bronce/osm/limites_municipales_colima_20261124.json,ok

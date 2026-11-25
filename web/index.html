@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trusted Data Lab · Observatorio de precios, Colima</title>
+<link rel="stylesheet" href="assets/css/estilos.css">
+</head>
+<body>
+<header class="cab">
+  <div>
+    <p class="sup">Trusted Data Lab · Ingeniería de Datos</p>
+    <h1>Observatorio de precios y tiendas de Colima</h1>
+    <p class="sub">Pipeline Bronce → Plata → Oro con INEGI, Banxico y OpenStreetMap. Autor: Kevin Gilberto Borjas Avalos.</p>
+  </div>
+  <p class="gen" id="generado"></p>
+</header>
+
+<main>
+  <section class="hero" aria-labelledby="t-hero">
+    <p class="hero-cifra" id="hero-cifra">–</p>
+    <div>
+      <h2 id="t-hero">Inflación anual (INPC nacional)</h2>
+      <p class="muted" id="hero-nota"></p>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis" aria-label="Indicadores clave"></section>
+
+  <div class="filtros" role="group" aria-label="Periodo de las series">
+    <span class="muted">Periodo:</span>
+    <button data-n="0" aria-pressed="true">Todo</button>
+    <button data-n="60" aria-pressed="false">5 años</button>
+    <button data-n="36" aria-pressed="false">3 años</button>
+    <button data-n="12" aria-pressed="false">1 año</button>
+  </div>
+
+  <section class="grid2">
+    <article class="card"><h2>Índice INPC</h2><p class="muted">Fuente: INEGI (serie nacional)</p><div class="chart" id="c-inpc"></div></article>
+    <article class="card"><h2>Variación anual del INPC (%)</h2><p class="muted">Cambio frente al mismo mes del año anterior</p><div class="chart" id="c-var"></div></article>
+    <article class="card"><h2>Tipo de cambio FIX (MXN por USD)</h2><p class="muted">Fuente: Banxico</p><div class="chart" id="c-fix"></div></article>
+    <article class="card"><h2>Estacionalidad de la inflación</h2><p class="muted">Variación mensual promedio por mes del año (%)</p><div class="chart" id="c-est"></div></article>
+  </section>
+
+  <section class="grid2">
+    <article class="card"><h2>Tiendas en Colima por municipio</h2><p class="muted" id="mapa-nota">Puntos = tiendas (OpenStreetMap). Color = densidad por municipio.</p><div class="chart mapa" id="c-mapa"></div></article>
+    <article class="card"><h2>Ranking de municipios</h2><p class="muted">Número de tiendas registradas</p><div class="chart" id="c-rank"></div></article>
+  </section>
+
+  <section class="card">
+    <h2>Calidad y linaje de los datos</h2>
+    <p class="muted">Qué se aceptó, qué se envió a cuarentena y de dónde viene cada dato.</p>
+    <div class="grid2" id="calidad"></div>
+  </section>
+
+  <section class="card">
+    <h2>Tabla de datos mensuales</h2>
+    <details><summary>Ver como tabla</summary><div class="tabla-wrap" id="tabla-oro"></div></details>
+  </section>
+
+  <section class="card nota">
+    <h2>Ética y limitaciones</h2>
+    <ul>
+      <li><b>Minimización:</b> solo se usan datos públicos agregados; no hay datos personales.</li>
+      <li><b>Sesgo:</b> la cobertura de OpenStreetMap es desigual entre municipios; menos tiendas no significa menos comercio.</li>
+      <li><b>INPC:</b> se usa la serie nacional porque la de Colima no está disponible en la fuente consultada.</li>
+      <li><b>Licencias:</b> © colaboradores de OpenStreetMap (ODbL); INEGI y Banxico como fuentes oficiales.</li>
+    </ul>
+  </section>
+</main>
+
+<div id="tip" class="tip" role="status" hidden></div>
+<script src="data/datos.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
